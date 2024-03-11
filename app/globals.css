@@ -2,32 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+@layer components {
+    .product-input {
+        @apply w-full rounded-lg border-[1px] border-slate-200 p-2 outline-none;
+    }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+    .btn-outlined {
+        @apply rounded-lg border-[1px] border-[#D0D5DD] bg-transparent px-2 py-[10px] text-[16px] font-semibold text-[#344054] hover:bg-[#D0D5DD];
+    }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .btn-filled {
+        @apply rounded-lg px-2 py-[10px] text-[16px] font-semibold text-[#fff];
+    }
+
+    .btn-filled-primary {
+        @apply rounded-lg bg-[#D92D20] px-2 py-[10px] text-[16px] font-semibold text-[#fff] hover:bg-[#ff392b];
+    }
 }
