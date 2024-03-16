@@ -1,36 +1,20 @@
-import { PRODUCT_LIST } from "@/constant.index";
-import Fab from "./components/fab";
-import AddProductModal from "@/app/components/add_product_modal/add_product_modal";
-import ProductItem from "@/app/components/product_item";
+import Fab from "./(components)/fab";
 import DeleteDataModal from "@/components/delete_data_modal";
+import { Suspense } from "react";
+import { ProductContainer } from "./(components)/product_container";
 
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
 };
 
-export default function Home({ searchParams }: SearchParamProps) {
-    const show = searchParams?.showaddproduct;
-    const showDelete = searchParams?.showdelete;
-    const index = searchParams?.index;
-
+export default async function Home({ searchParams }: SearchParamProps) {
     return (
         <main className="flex min-h-screen flex-col items-center p-2">
-            <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
-                {PRODUCT_LIST.map((element, index) => (
-                    <ProductItem key={index} data={element} index={index} />
-                ))}
-            </div>
+            <Suspense fallback={"Loading..."}>
+                <ProductContainer />
+            </Suspense>
             <Fab />
-            {show && (
-                <AddProductModal
-                    data={
-                        index === undefined
-                            ? undefined
-                            : PRODUCT_LIST[Number(index)]
-                    }
-                />
-            )}
-            {showDelete && <DeleteDataModal pathname={"/"} />}
+            <DeleteDataModal />
         </main>
     );
 }
