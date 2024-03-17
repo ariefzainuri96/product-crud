@@ -1,4 +1,4 @@
-import AddProductModal from "./add_product_modal/add_product_modal";
+import AddProductModal from "./add_product_modal";
 import ProductItem from "./product_item";
 import { getProducts } from "../services";
 

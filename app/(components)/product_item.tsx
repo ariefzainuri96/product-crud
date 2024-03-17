@@ -2,13 +2,9 @@
 
 import Link from "next/link";
 import { CustomImage } from "../../components/custom_image";
-import { usePathname, useRouter } from "next/navigation";
 import { Product } from "@/model/response/dashboard/product_response";
 
 const ProductItem = ({ data, index }: { data: Product; index: number }) => {
-    const router = useRouter();
-    const pathname = usePathname();
-
     return (
         <Link href={`/${data._id}`}>
             <div className="flex flex-row rounded-lg bg-slate-50 p-2 hover:bg-slate-100">

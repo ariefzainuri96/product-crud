@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 const secretKey = process.env.SECRET_KEY;
 const key = new TextEncoder().encode(secretKey);
@@ -36,7 +37,9 @@ export async function authenticate(prevState: any, formData: FormData) {
             redirect("/");
         }
     } catch (error) {
-        throw error;
+        console.log(error);
+
+        if (isRedirectError(error)) throw error;
     }
 }
 

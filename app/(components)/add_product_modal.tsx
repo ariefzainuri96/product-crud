@@ -1,20 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
     Product,
     ProductResponse,
 } from "@/model/response/dashboard/product_response";
 import { handleUpdateOrAdd } from "@/app/services";
-import { CancelForm } from "./cancel_form";
+import { useFormState, useFormStatus } from "react-dom";
 
 const AddProductModal = ({ data }: { data?: ProductResponse }) => {
     const searchParam = useSearchParams();
     const show = searchParam.get("showaddproduct");
     const index = searchParam.get("index");
+
     const product: Product | undefined =
         index === null ? undefined : (data?.data ?? [])[Number(index)];
+    const [message, dispatch] = useFormState(
+        handleUpdateOrAdd,
+        undefined,
+    );
 
     return (
         show && (
@@ -29,11 +34,7 @@ const AddProductModal = ({ data }: { data?: ProductResponse }) => {
                     <p className="mt-[20px] text-[18px] font-bold">
                         {index !== null ? "Update Product" : "Add Product"}
                     </p>
-                    <form
-                        action={(data) => {
-                            handleUpdateOrAdd(index !== null, data);
-                        }}
-                    >
+                    <form action={dispatch}>
                         <input
                             type="text"
                             defaultValue={product?.name}
@@ -50,19 +51,22 @@ const AddProductModal = ({ data }: { data?: ProductResponse }) => {
                         />
                         <input
                             type="number"
-                            name="qty"
+                            name="quantity"
                             defaultValue={product?.quantity}
                             placeholder="Input Product Quantity"
                             className="product-input mt-2"
                         />
+                        <input
+                            type="text"
+                            name="product_id"
+                            defaultValue={
+                                product !== undefined ? product?._id : ""
+                            }
+                            hidden={true}
+                        />
                         <div className="mt-4 flex w-full flex-row gap-[12px]">
                             <CancelForm />
-                            <button
-                                type="submit"
-                                className="btn-filled-primary flex-1"
-                            >
-                                {product ? "Update" : "Add"}
-                            </button>
+                            <SubmitForm isUpdate={index !== null} />
                         </div>
                     </form>
                 </div>
@@ -70,5 +74,43 @@ const AddProductModal = ({ data }: { data?: ProductResponse }) => {
         )
     );
 };
+
+const SubmitForm = ({isUpdate}: {isUpdate: boolean}) => {
+    const {pending} = useFormStatus();
+
+    return (
+        <button
+            type="submit"
+            className={
+                "btn-filled-primary flex-1 " +
+                (pending ? "bg-slate-400 hover:bg-slate-400" : "")
+            }
+            aria-disabled={pending}
+        >
+            {isUpdate ? "Update" : "Add"}
+        </button>
+    );
+}
+
+function CancelForm() {
+    const { pending } = useFormStatus();
+    const router = useRouter();
+
+    return (
+        <button
+            onClick={(e) => {
+                e.preventDefault();
+
+                if (pending) return;
+
+                router.back();
+            }}
+            type="submit"
+            className="btn-outlined w-full flex-1"
+        >
+            Cancel
+        </button>
+    );
+}
 
 export default AddProductModal;

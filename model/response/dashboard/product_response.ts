@@ -1,6 +1,6 @@
 export interface ProductResponse {
     status?: number;
-    message: string;
+    message?: string;
     data?: Product[];
 }
 
