@@ -14,7 +14,9 @@ export default async function Home({ searchParams }: SearchParamProps) {
                 <ProductContainer />
             </Suspense>
             <Fab />
-            <DeleteDataModal />
+            <Suspense fallback={"Loading..."}>
+                <DeleteDataModal />
+            </Suspense>
         </main>
     );
 }
